@@ -1,0 +1,155 @@
+﻿@model WebApplication1.Models.Article
+@{
+    ViewBag.Title = "news";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .form-control-inline {
+    min-width: 0;
+    width: auto;
+    display: inline;
+}
+  
+.img-container img {
+    width: 100%;
+    height: 100%;       
+}
+.img-container iframe{
+    width:100%;
+}
+
+div .wrapper{
+    width:60%;
+    margin-left:auto; 
+    margin-right:auto;
+    display:block;
+    float:left;
+}
+
+div .content{
+    width:100%; 
+    margin-left:auto; 
+    margin-right:auto; 
+    margin-top:50px;
+}
+
+
+
+</style>
+
+<style>
+    @@media (min-width: 768px) and (max-width: 991px) {
+        div .wrapper{
+            width:100%;
+        }
+        .social{
+            width:100%;
+            display:block;
+            
+        }
+    }
+
+</style>
+
+<style>
+    @@media (max-width: 767px) {
+    div .wrapper{
+            width:100%;
+        }
+    .social{
+            width:100%;
+            display:block;
+            
+        }
+    }
+</style>
+
+<div class="wrapper">
+    <div  class="social">
+        <div class="social_content">
+            <a href="https://twitter.com/intent/tweet?url=@HttpContext.Current.Request.Url.AbsoluteUri&text=@Html.Raw(Server.HtmlDecode(Model.Name))&via=YOURTWITTERNAMEHERE">
+                <img src="~/Content/social_icons/twitter.png" alt="Twitter" style="width:42px;height:42px;border:0">
+            </a>
+            <a href="https://facebook.com/sharer.php?u=@HttpContext.Current.Request.Url.AbsoluteUri">
+                <img src="~/Content/social_icons/facebook.png" alt="Facebook" style="width:42px;height:42px;border:0">
+            </a>
+            <a href="https://plus.google.com/share?url=@HttpContext.Current.Request.Url.AbsoluteUri">
+                <img src="~/Content/social_icons/google.png" alt="Google+" style="width:42px;height:42px;border:0">
+            </a>
+
+            <a href="http://vk.com/share.php?url=@HttpContext.Current.Request.Url.AbsoluteUri&title=@Html.Raw(Server.HtmlDecode(Model.Name))%20Title&description=Shared%20Page%20Description&image=http://localhost:1530/Articles/GetProductImage/@Model.ID">
+                <img src="~/Content/social_icons/vk.png" alt="Vkontakte" style="width:42px;height:42px;border:0">
+            </a>
+        </div>
+    </div>
+
+    <div class="content" style="margin-left:auto; margin-right:auto; width:100%">
+        <text style="font-size:20px;">
+            @Html.Raw(Server.HtmlDecode(Model.Name))
+        </text><br /><br />
+        <text style="font-style:italic">
+            @Html.Raw(Server.HtmlDecode(Model.Description))
+        </text><br /><br />
+        <center>
+            <img width="100%" src="@Url.Action("GetCoverImage", "Articles", routeValues: new { id = Model.ID })" class="img-rounded" />
+        </center><br /><br />
+       <div class="img-container">
+           @Html.Raw(Server.HtmlDecode(Model.Content))
+       </div>
+        
+    </div>
+
+    
+    @Html.Partial("_Disqus")
+    <hr />
+
+
+
+</div>
+
+<div id="TopBar" class="popular_by_week" style="float:right; padding-left:50px; width:30%; background-color:white">
+    <p style="float:left; font-size:20px">
+        Популярні за тиждень:
+    </p>
+    <table class="table" style="table-layout:fixed">
+        @foreach (var item in ViewBag.TopThree)
+        {
+            <tr>
+                <td>
+                    <text style="float:left; font-size:12px; font-weight:700;">@Html.ActionLink((string)item.Name, "news", "Home", new { id = @item.ID }, new { @class = "more markered", @style = "color:black" })</text><br /><br />
+                    <br />
+                    <center><a href='@Url.Action("news", "Home", routeValues: new { id = item.ID })'><img width="100%" src="@Url.Action("GetImageTop", "Articles", routeValues: new { id = item.ID })" class="img-rounded" /></a></center>
+                </td>
+                <td>
+                    <br /><br /><br /><br />
+                    <span class="glyphicon glyphicon-eye-open"></span>
+                </td>
+                <td>
+                    <br /><br /><br /><br />
+                    @item.ViewCount
+                </td>
+            </tr>
+        }
+    </table>
+
+            <text style="font-size:20px; font-weight:bold">
+                Категорії:
+            </text><br />
+
+            @foreach (var item in ViewBag.Categories)
+            {
+                <a href='@Url.Action("Index", "Home",routeValues: new { category = item.Name })' style="color:black ; font-weight:bold; float:left"><text style="color:#4db7ad">&#9632;</text> @item.Name </a><br />
+            }
+</div>
+
+
+
+
+
+
+
+
+
+
+
+

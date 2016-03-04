@@ -1,0 +1,22 @@
+﻿@model WebApplication1.Models.Article
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<img width="100" height="100" src="@Url.Action("GetCoverImage", "Articles", routeValues: new { id = Model.ID })" class="img-rounded" />
+<div>
+ <hr />
+    <a href="@Url.Action("Index","Articles")"><button style ="float:left" class="btn btn-default">Back |</button></a>
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        <div class="form-actions no-color">
+             
+            <input id ="intp" type="submit" value="Delete" class="btn btn-default" />
+        </div>
+    }
+</div>

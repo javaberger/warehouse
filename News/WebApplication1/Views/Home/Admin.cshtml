@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "Admin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="background-color:#e1e1e1; height:100px; border-radius:20px;">
+    <ul class="nav navbar-nav">
+        <li>@Html.ActionLink("Новини", "Index", "Articles", new {@style = "color:black"})</li>
+        <li>@Html.ActionLink("Категорії новин", "Index", "Categories", new { @style = "color:black" })</li>
+    </ul>
+
+</div>
+
+
+

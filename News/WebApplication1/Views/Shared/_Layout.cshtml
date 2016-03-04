@@ -1,0 +1,106 @@
+﻿@using WebApplication1.Models;
+@using PagedList.Mvc;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - &ltHiNews&gt</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+
+    <style>
+
+        
+        .scrollup { 
+            width: 40px;
+            height: 40px;
+            opacity: 0.3;
+            position: fixed;
+            bottom: 50px;
+            right: 100px;
+            display: none;
+            text-indent: -9999px;
+            background: url('Content/icon_top.png') no-repeat;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div style="background-color:#4db7ad; height:18px;margin-top:-30px;">
+        
+    </div>
+
+    <div class="navbar navbar-default">
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <i class="glyphicon glyphicon-leaf" style="margin-top:12px; font-size:20px; color:coral;"></i>
+                @Html.ActionLink("Hi-News", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", @style = "color:coral; font-weight:bold; font-size:25px" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Головна", "Index", "Home")</li>
+                    @if (this.User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Admin", "Admin", "Home")</li>
+                    }
+                    <li>@Html.ActionLink("Додати новину", "Create", "Articles")</li>
+
+                </ul>
+
+                
+                    @Html.Partial("_LoginPartial")
+
+                @*<div class="dropdown" style="display:inline-block; margin-top:8px;">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Категорії
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        @foreach (var item in (IEnumerable<Categories>)ViewData["categories"])
+                        {
+                            <li><a href='@Url.Action("Index", "Home",routeValues: new { category = item.Name })' style="color:black ; font-weight:bold; float:left"><text style="color:#4db7ad">&#9632;</text> @item.Name </a></li>
+                        }
+                    </ul>
+                </div>*@
+
+
+                @*<div class="navbar-form navbar-left" role="search">
+                    @using (Html.BeginForm("Index", "Home", FormMethod.Get))
+                    {
+                        <div class="form-group">
+                            <input type="text" name="search" class="form-control" placeholder="Search" id="search" style="width:200px;  margin-left:10px; float:left">
+                        </div>
+                        <div class="form-group">
+                            <button id="search" type="submit" value="Пошук" class="btn btn-info" style="margin-left:10px; width:50px; background-color:#4db7ad"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                        </div>
+                    }
+                </div>*@
+            </div>
+        </div>
+        </div>
+        
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/scrollup")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("scripts", required: false)
+    <a href="#" class="scrollup">Наверх</a>
+</body>
+</html>
