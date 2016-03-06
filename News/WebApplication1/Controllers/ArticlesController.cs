@@ -12,6 +12,7 @@ using WebApplication1.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using PagedList;
+using System.Diagnostics;
 
 namespace WebApplication1.Controllers
 {
@@ -23,10 +24,11 @@ namespace WebApplication1.Controllers
         [Authorize]
         public ActionResult Index(int? page)
         {
+            
             int pageSize = 4;
             int pageNumber = (page ?? 1);
             ViewBag.User = User.Identity.Name;
-            return View(db.Articles.OrderByDescending(p=>p.ID).ToPagedList(pageNumber,pageSize));
+            return View("Index",db.Articles.OrderByDescending(p=>p.ID).ToPagedList(pageNumber,pageSize));
         }
 
         // GET: Articles/Details/5
@@ -87,12 +89,7 @@ namespace WebApplication1.Controllers
                     file.SaveAs(path);
                 }
 
-               
-                String serverTime = DateTime.Now.Month.ToString("0#") + "/"
-                 + DateTime.Now.Day.ToString("0#") + "/"
-                 + DateTime.Now.Year.ToString();
-
-                article.DateCreate = serverTime;
+                article.DateCreate = DateTime.Now;
 
                 var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
 

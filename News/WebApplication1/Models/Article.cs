@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
+using System;
 
 namespace WebApplication1.Models
 {
@@ -18,7 +19,7 @@ namespace WebApplication1.Models
         [Display(Name = "Page Content")]
         public string Content { get; set; }
 
-        public string DateCreate { get; set; }
+        public DateTime DateCreate { get; set; }
 
         public string CoverType { get; set; }
 

@@ -94,7 +94,7 @@ div .content{
             <img width="100%" src="@Url.Action("GetCoverImage", "Articles", routeValues: new { id = Model.ID })" class="img-rounded" />
         </center><br /><br />
        <div class="img-container">
-           @Html.Raw(Server.HtmlDecode(Model.Content))
+          @Html.Raw(Model.Content)
        </div>
         
     </div>

@@ -262,6 +262,10 @@
     <Compile Include="Migrations\201602030742274_5.Designer.cs">
       <DependentUpon>201602030742274_5.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603061057426_DateTime.cs" />
+    <Compile Include="Migrations\201603061057426_DateTime.Designer.cs">
+      <DependentUpon>201603061057426_DateTime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Article.cs" />
@@ -664,6 +668,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201602030742274_5.resx">
       <DependentUpon>201602030742274_5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603061057426_DateTime.resx">
+      <DependentUpon>201603061057426_DateTime.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -27,8 +27,6 @@
     </div>
 </div>
 
-
-
 @if (Model.Count > 0)
 {
     <div style="margin-bottom:50px;margin-left:15px;">
@@ -43,7 +41,7 @@
     </div>
 }
 
-<div>
+<div id="wrapper">
     <div  id="TopBar" class="popular_by_week">
         <p style="color:#5073bb">
             Популярні за тиждень
@@ -96,6 +94,7 @@
                                         <li >@i.LastName @i.FirstName</li>
                                         <img style="width:100px;height:100px; border-radius:50%" src="@Url.Action("GetUserImage","Home", routeValues: new { id = i.Id })" />
                                         <li style="color:#338b5d">@item.Categories.Name</li>
+                                    
                                     }
                                     j++;
                                 }
@@ -103,7 +102,8 @@
                     </td>
                     
                     <td>
-                        <text style="float:left; font-size:20px;">@Html.ActionLink(item.Name, "news", "Home", new { id = item.ID }, new { @style = "color:black;" })</text><br /><br /><br />
+                        <text style="float:left; font-size:20px;">@Html.ActionLink(item.Name, "news", "Home", new { id = item.ID }, new { @style = "color:black;" })</text><br /><br />
+                        <text style="float:right; font-size:12px; color:#338b5d">@item.DateCreate</text>
                         <center><a href='@Url.Action("news", "Home",routeValues: new { id = item.ID })'><img width="100%" src="@Url.Action("GetCoverImage", "Articles", routeValues: new { id = item.ID })" class="img-rounded" /></a></center>
                     </td>
                 </tr>

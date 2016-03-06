@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace WebApplication1.Controllers
 {
@@ -45,8 +46,12 @@ namespace WebApplication1.Controllers
             int pageSize = 4;
             int pageNumber = (page ?? 1);
 
+            var now = System.DateTime.Now;
+
+            var MondayDate = now.AddDays(-((now.DayOfWeek - System.Threading.Thread.CurrentThread.CurrentCulture.DateTimeFormat.FirstDayOfWeek + 7) % 7)).Date;
+
             //TopNews(3)
-            ViewBag.TopThree = (from a in db.Articles orderby a.ViewCount descending select a).Take(3);
+            ViewBag.TopThree = (from a in db.Articles where a.DateCreate >= MondayDate && a.DateCreate <= now orderby a.ViewCount descending select a).Take(3);
 
             //Categories
             ViewBag.Categories = db.Categories.ToList();
@@ -92,6 +97,7 @@ namespace WebApplication1.Controllers
             }
             else
             {
+                            
                 //Main model
                 var query = from news in db.Articles join users in db.Users on news.UserID equals users.Id orderby news.ID descending select users;
                 if (query != null)
