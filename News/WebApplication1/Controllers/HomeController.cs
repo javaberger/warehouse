@@ -53,6 +53,7 @@ namespace WebApplication1.Controllers
             //TopNews(3)
             ViewBag.TopThree = (from a in db.Articles where a.DateCreate >= MondayDate && a.DateCreate <= now orderby a.ViewCount descending select a).Take(3);
 
+            ViewBag.WeekCount = (from a in db.Articles where a.DateCreate >= MondayDate && a.DateCreate <= now orderby a.ViewCount descending select a).Count();
             //Categories
             ViewBag.Categories = db.Categories.ToList();
 
@@ -75,7 +76,7 @@ namespace WebApplication1.Controllers
                               select users;
                 ViewBag.Query = Users.ToList().ToPagedList(pageNumber, pageSize);
                 
-                ViewBag.SearchString = "По вашому запиту знайдено ["+query.Count()+"] статті";
+                ViewBag.SearchString = "По вашому запиту '"+search+"' знайдено ["+query.Count()+"] статті";
                 return View(query.ToPagedList(pageNumber, pageSize));
             }
             else
@@ -86,7 +87,7 @@ namespace WebApplication1.Controllers
             if (category != null)
             {
                 var query = from articless in db.Articles where articless.Categories.Name == category orderby articless.ID descending select articless;
-                ViewBag.SearchString = "По вашому запиту знайдено [" + query.Count() + "] статті";
+                ViewBag.SearchString = "По вашому запиту '"+category+"' знайдено [" + query.Count() + "] статті";
 
                 var newsCat = from news in db.Articles join users in db.Users on news.UserID equals users.Id where news.Categories.Name == category orderby news.ID descending select users;
                 if (query != null)

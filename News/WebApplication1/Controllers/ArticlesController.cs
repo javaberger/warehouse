@@ -186,6 +186,7 @@ namespace WebApplication1.Controllers
                     db.Entry(article).Property(r => r.Cover).IsModified = false;
                     db.Entry(article).Property(r => r.CoverType).IsModified = false;
                 }
+                db.Entry(article).Property(r => r.UserID).IsModified = false;
                 db.Entry(article).Property(r => r.DateCreate).IsModified = false;
                 db.SaveChanges();
                 return RedirectToAction("Index");
