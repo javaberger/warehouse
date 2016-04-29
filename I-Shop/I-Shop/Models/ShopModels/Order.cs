@@ -5,7 +5,7 @@ using System.Web;
 
 namespace I_Shop.Models.I_ShopModels
 {
-    public class ProductCategories
+    public class Order
     {
     }
 }

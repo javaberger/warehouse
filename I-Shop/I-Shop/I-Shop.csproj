@@ -174,12 +174,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\I-ShopModels\Clients.cs" />
-    <Compile Include="Models\I-ShopModels\Orders.cs" />
-    <Compile Include="Models\I-ShopModels\Products.cs" />
-    <Compile Include="Models\I-ShopModels\ProductCategories.cs" />
+    <Compile Include="Models\ShopModels\Client.cs" />
+    <Compile Include="Models\ShopModels\Order.cs" />
+    <Compile Include="Models\ShopModels\Product.cs" />
+    <Compile Include="Models\ShopModels\ProductCategorie.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ShopContext.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
