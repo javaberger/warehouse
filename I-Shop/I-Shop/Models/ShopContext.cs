@@ -1,4 +1,5 @@
-﻿using System;
+﻿using I_Shop.Models.ShopModels;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -12,5 +13,10 @@ namespace I_Shop.Models
         {
             Database.SetInitializer(new CreateDatabaseIfNotExists<ShopContext>());
         }
+        public DbSet<Order> Order { get; set; }
+        public DbSet<Product> Product { get; set; }
+        public DbSet<Client> Client { get; set; }
+        public DbSet<ProductCategory> Category { get; set; }
+
     }
 }
