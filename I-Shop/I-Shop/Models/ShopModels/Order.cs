@@ -12,5 +12,6 @@ namespace I_Shop.Models.ShopModels
         public int OrderID { get; set; }
         public DateTime dateTime { get; set; }
         public ICollection<Product> Product { get; set; }
+        public Customer Customer { get; set; }
     }
 }

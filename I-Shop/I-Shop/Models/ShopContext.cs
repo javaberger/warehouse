@@ -15,7 +15,7 @@ namespace I_Shop.Models
         }
         public DbSet<Order> Order { get; set; }
         public DbSet<Product> Product { get; set; }
-        public DbSet<Client> Client { get; set; }
+        public DbSet<Customer> Client { get; set; }
         public DbSet<ProductCategory> Category { get; set; }
 
     }

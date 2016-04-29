@@ -13,6 +13,7 @@ namespace I_Shop.Models.ShopModels
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
+        public ProductCategory Category { get; set; }
         public ICollection<Order> Orders { get; set; }
     }
 }

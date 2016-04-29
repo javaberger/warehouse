@@ -176,7 +176,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\ShopModels\Client.cs" />
+    <Compile Include="Models\ShopModels\Customer.cs" />
     <Compile Include="Models\ShopModels\Order.cs" />
     <Compile Include="Models\ShopModels\Product.cs" />
     <Compile Include="Models\ShopModels\ProductCategory.cs" />
