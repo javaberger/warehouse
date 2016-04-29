@@ -17,7 +17,7 @@
                 {
                     <button type="submit" class="btn btn-default" value="Search" style="float: right;"><span class=" glyphicon glyphicon-search"></span></button>
                     <div style="overflow: hidden; padding-right: .5em;">
-                        <input type="text" class="search-query form-control" placeholder="Search" style="width: 100%; max-width:500px;width:500px;" />
+                        <input type="text" class="search-query form-control" placeholder="Search" style="width: 100%; max-width:500px;width:500px;" ng-model="searhProduct"/>
                     </div>
                 }
             </div>
@@ -42,7 +42,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="prod in Products">
+                <tr ng-repeat="prod in products">
                     <td>{{prod.Name}}</td>
                     <td>{{prod.Description}}</td>
                     <td>{{prod.Price | currency}}</td>

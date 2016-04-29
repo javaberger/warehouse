@@ -26,9 +26,6 @@ namespace I_Shop.Controllers
             return db.Product;
         }
 
-
-
-
         // GET: api/Products/5
         [ResponseType(typeof(Product))]
         public async Task<IHttpActionResult> GetProduct(int id)
