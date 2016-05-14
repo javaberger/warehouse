@@ -3,48 +3,17 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - I-Shop</title>
+    <title>ASP.NET Web API / AngularJS Grid</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <script src="~/Scripts/logic/app.js"></script>
-    <script src="~/Scripts/angular.js"></script>
-    <style>
-        .content {
-            width: 100%;
-        }
-    </style>
 </head>
-
-<body>
-    <div class="navbar navbar-default navbar-fixed-top">
-        <div class="content">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
-        </div>
-    </div>
-    <div style="height:10px; background-color:#dedede"></div>
-    <div class="content">
-        <br />
+<body ng-app="app">
+    <div class="container body-content">
         @RenderBody()
-
-        <footer>
-            <p></p>
-        </footer>
     </div>
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/app")
     @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -1,12 +1,9 @@
 /**
- * @license AngularJS v1.5.5
- * (c) 2010-2016 Google, Inc. http://angularjs.org
+ * @license AngularJS v1.3.1
+ * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
-(function(window, angular) {'use strict';
-
-/* global ngTouchClickDirectiveFactory: false,
- */
+(function(window, angular, undefined) {'use strict';
 
 /**
  * @ngdoc module
@@ -30,108 +27,6 @@
 /* global -ngTouch */
 var ngTouch = angular.module('ngTouch', []);
 
-ngTouch.provider('$touch', $TouchProvider);
-
-function nodeName_(element) {
-  return angular.lowercase(element.nodeName || (element[0] && element[0].nodeName));
-}
-
-/**
- * @ngdoc provider
- * @name $touchProvider
- *
- * @description
- * The `$touchProvider` allows enabling / disabling {@link ngTouch.ngClick ngTouch's ngClick directive}.
- */
-$TouchProvider.$inject = ['$provide', '$compileProvider'];
-function $TouchProvider($provide, $compileProvider) {
-
-  /**
-   * @ngdoc method
-   * @name  $touchProvider#ngClickOverrideEnabled
-   *
-   * @param {boolean=} enabled update the ngClickOverrideEnabled state if provided, otherwise just return the
-   * current ngClickOverrideEnabled state
-   * @returns {*} current value if used as getter or itself (chaining) if used as setter
-   *
-   * @kind function
-   *
-   * @description
-   * Call this method to enable/disable {@link ngTouch.ngClick ngTouch's ngClick directive}. If enabled,
-   * the default ngClick directive will be replaced by a version that eliminates the 300ms delay for
-   * click events on browser for touch-devices.
-   *
-   * The default is `false`.
-   *
-   */
-  var ngClickOverrideEnabled = false;
-  var ngClickDirectiveAdded = false;
-  this.ngClickOverrideEnabled = function(enabled) {
-    if (angular.isDefined(enabled)) {
-
-      if (enabled && !ngClickDirectiveAdded) {
-        ngClickDirectiveAdded = true;
-
-        // Use this to identify the correct directive in the delegate
-        ngTouchClickDirectiveFactory.$$moduleName = 'ngTouch';
-        $compileProvider.directive('ngClick', ngTouchClickDirectiveFactory);
-
-        $provide.decorator('ngClickDirective', ['$delegate', function($delegate) {
-          if (ngClickOverrideEnabled) {
-            // drop the default ngClick directive
-            $delegate.shift();
-          } else {
-            // drop the ngTouch ngClick directive if the override has been re-disabled (because
-            // we cannot de-register added directives)
-            var i = $delegate.length - 1;
-            while (i >= 0) {
-              if ($delegate[i].$$moduleName === 'ngTouch') {
-                $delegate.splice(i, 1);
-                break;
-              }
-              i--;
-            }
-          }
-
-          return $delegate;
-        }]);
-      }
-
-      ngClickOverrideEnabled = enabled;
-      return this;
-    }
-
-    return ngClickOverrideEnabled;
-  };
-
-  /**
-  * @ngdoc service
-  * @name $touch
-  * @kind object
-  *
-  * @description
-  * Provides the {@link ngTouch.$touch#ngClickOverrideEnabled `ngClickOverrideEnabled`} method.
-  *
-  */
-  this.$get = function() {
-    return {
-      /**
-       * @ngdoc method
-       * @name  $touch#ngClickOverrideEnabled
-       *
-       * @returns {*} current value of `ngClickOverrideEnabled` set in the {@link ngTouch.$touchProvider $touchProvider},
-       * i.e. if {@link ngTouch.ngClick ngTouch's ngClick} directive is enabled.
-       *
-       * @kind function
-       */
-      ngClickOverrideEnabled: function() {
-        return ngClickOverrideEnabled;
-      }
-    };
-  };
-
-}
-
 /* global ngTouch: false */
 
     /**
@@ -144,7 +39,8 @@ function $TouchProvider($provide, $compileProvider) {
      *
      * Requires the {@link ngTouch `ngTouch`} module to be installed.
      *
-     * `$swipe` is used by the `ngSwipeLeft` and `ngSwipeRight` directives in `ngTouch`.
+     * `$swipe` is used by the `ngSwipeLeft` and `ngSwipeRight` directives in `ngTouch`, and by
+     * `ngCarousel` in a separate component.
      *
      * # Usage
      * The `$swipe` service is an object with a single method: `bind`. `bind` takes an element
@@ -171,9 +67,11 @@ ngTouch.factory('$swipe', [function() {
   };
 
   function getCoordinates(event) {
-    var originalEvent = event.originalEvent || event;
-    var touches = originalEvent.touches && originalEvent.touches.length ? originalEvent.touches : [originalEvent];
-    var e = (originalEvent.changedTouches && originalEvent.changedTouches[0]) || touches[0];
+    var touches = event.touches && event.touches.length ? event.touches : [event];
+    var e = (event.changedTouches && event.changedTouches[0]) ||
+        (event.originalEvent && event.originalEvent.changedTouches &&
+            event.originalEvent.changedTouches[0]) ||
+        touches[0].originalEvent || touches[0];
 
     return {
       x: e.clientX,
@@ -205,8 +103,7 @@ ngTouch.factory('$swipe', [function() {
      * `$swipe` will listen for `mouse` and `touch` events.
      *
      * The four events are `start`, `move`, `end`, and `cancel`. `start`, `move`, and `end`
-     * receive as a parameter a coordinates object of the form `{ x: 150, y: 310 }` and the raw
-     * `event`. `cancel` receives the raw `event` as its single parameter.
+     * receive as a parameter a coordinates object of the form `{ x: 150, y: 310 }`.
      *
      * `start` is called on either `mousedown` or `touchstart`. After this event, `$swipe` is
      * watching for `touchmove` or `mousemove` events. These events are ignored until the total
@@ -296,24 +193,13 @@ ngTouch.factory('$swipe', [function() {
   };
 }]);
 
-/* global ngTouch: false,
-  nodeName_: false
-*/
+/* global ngTouch: false */
 
 /**
  * @ngdoc directive
  * @name ngClick
- * @deprecated
  *
  * @description
- * <div class="alert alert-danger">
- * **DEPRECATION NOTICE**: Beginning with Angular 1.5, this directive is deprecated and by default **disabled**.
- * The directive will receive no further support and might be removed from future releases.
- * If you need the directive, you can enable it with the {@link ngTouch.$touchProvider $touchProvider#ngClickOverrideEnabled}
- * function. We also recommend that you migrate to [FastClick](https://github.com/ftlabs/fastclick).
- * To learn more about the 300ms delay, this [Telerik article](http://developer.telerik.com/featured/300-ms-click-delay-ios-8/)
- * gives a good overview.
- * </div>
  * A more powerful replacement for the default ngClick designed to be used on touchscreen
  * devices. Most mobile browsers wait about 300ms after a tap-and-release before sending
  * the click event. This version handles them immediately, and then prevents the
@@ -345,7 +231,15 @@ ngTouch.factory('$swipe', [function() {
     </example>
  */
 
-var ngTouchClickDirectiveFactory = ['$parse', '$timeout', '$rootElement',
+ngTouch.config(['$provide', function($provide) {
+  $provide.decorator('ngClickDirective', ['$delegate', function($delegate) {
+    // drop the default ngClick directive
+    $delegate.shift();
+    return $delegate;
+  }]);
+}]);
+
+ngTouch.directive('ngClick', ['$parse', '$timeout', '$rootElement',
     function($parse, $timeout, $rootElement) {
   var TAP_DURATION = 750; // Shorter than 750ms is a tap, longer is a taphold or drag.
   var MOVE_TOLERANCE = 12; // 12px seems to work in most mobile browsers.
@@ -365,7 +259,7 @@ var ngTouchClickDirectiveFactory = ['$parse', '$timeout', '$rootElement',
   // double-tapping, and then fire a click event.
   //
   // This delay sucks and makes mobile apps feel unresponsive.
-  // So we detect touchstart, touchcancel and touchend ourselves and determine when
+  // So we detect touchstart, touchmove, touchcancel and touchend ourselves and determine when
   // the user has tapped on something.
   //
   // What happens when the browser then generates a click event?
@@ -377,7 +271,7 @@ var ngTouchClickDirectiveFactory = ['$parse', '$timeout', '$rootElement',
   // So the sequence for a tap is:
   // - global touchstart: Sets an "allowable region" at the point touched.
   // - element's touchstart: Starts a touch
-  // (- touchcancel ends the touch, no click follows)
+  // (- touchmove or touchcancel ends the touch, no click follows)
   // - element's touchend: Determines if the tap is valid (didn't move too far away, didn't hold
   //   too long) and fires the user's tap handler. The touchend also calls preventGhostClick().
   // - preventGhostClick() removes the allowable region the global touchstart created.
@@ -407,7 +301,7 @@ var ngTouchClickDirectiveFactory = ['$parse', '$timeout', '$rootElement',
   // Splices out the allowable region from the list after it has been used.
   function checkAllowableRegions(touchCoordinates, x, y) {
     for (var i = 0; i < touchCoordinates.length; i += 2) {
-      if (hit(touchCoordinates[i], touchCoordinates[i + 1], x, y)) {
+      if (hit(touchCoordinates[i], touchCoordinates[i+1], x, y)) {
         touchCoordinates.splice(i, i + 2);
         return true; // allowable region
       }
@@ -441,7 +335,7 @@ var ngTouchClickDirectiveFactory = ['$parse', '$timeout', '$rootElement',
       lastLabelClickCoordinates = null;
     }
     // remember label click coordinates to prevent click busting of trigger click event on input
-    if (nodeName_(event.target) === 'label') {
+    if (event.target.tagName.toLowerCase() === 'label') {
       lastLabelClickCoordinates = [x, y];
     }
 
@@ -457,7 +351,7 @@ var ngTouchClickDirectiveFactory = ['$parse', '$timeout', '$rootElement',
     event.preventDefault();
 
     // Blur focused form elements
-    event.target && event.target.blur && event.target.blur();
+    event.target && event.target.blur();
   }
 
 
@@ -472,7 +366,7 @@ var ngTouchClickDirectiveFactory = ['$parse', '$timeout', '$rootElement',
     $timeout(function() {
       // Remove the allowable region.
       for (var i = 0; i < touchCoordinates.length; i += 2) {
-        if (touchCoordinates[i] == x && touchCoordinates[i + 1] == y) {
+        if (touchCoordinates[i] == x && touchCoordinates[i+1] == y) {
           touchCoordinates.splice(i, i + 2);
           return;
         }
@@ -520,12 +414,14 @@ var ngTouchClickDirectiveFactory = ['$parse', '$timeout', '$rootElement',
 
       startTime = Date.now();
 
-      // Use jQuery originalEvent
-      var originalEvent = event.originalEvent || event;
-      var touches = originalEvent.touches && originalEvent.touches.length ? originalEvent.touches : [originalEvent];
-      var e = touches[0];
+      var touches = event.touches && event.touches.length ? event.touches : [event];
+      var e = touches[0].originalEvent || touches[0];
       touchStartX = e.clientX;
       touchStartY = e.clientY;
+    });
+
+    element.on('touchmove', function(event) {
+      resetState();
     });
 
     element.on('touchcancel', function(event) {
@@ -535,12 +431,9 @@ var ngTouchClickDirectiveFactory = ['$parse', '$timeout', '$rootElement',
     element.on('touchend', function(event) {
       var diff = Date.now() - startTime;
 
-      // Use jQuery originalEvent
-      var originalEvent = event.originalEvent || event;
-      var touches = (originalEvent.changedTouches && originalEvent.changedTouches.length) ?
-          originalEvent.changedTouches :
-          ((originalEvent.touches && originalEvent.touches.length) ? originalEvent.touches : [originalEvent]);
-      var e = touches[0];
+      var touches = (event.changedTouches && event.changedTouches.length) ? event.changedTouches :
+          ((event.touches && event.touches.length) ? event.touches : [event]);
+      var e = touches[0].originalEvent || touches[0];
       var x = e.clientX;
       var y = e.clientY;
       var dist = Math.sqrt(Math.pow(x - touchStartX, 2) + Math.pow(y - touchStartY, 2));
@@ -589,7 +482,7 @@ var ngTouchClickDirectiveFactory = ['$parse', '$timeout', '$rootElement',
     });
 
   };
-}];
+}]);
 
 /* global ngTouch: false */
 

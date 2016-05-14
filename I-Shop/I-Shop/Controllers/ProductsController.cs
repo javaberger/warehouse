@@ -17,106 +17,51 @@ namespace I_Shop.Controllers
 {
     public class ProductsController : ApiController
     {
-        private ShopContext db = new ShopContext();
+        private readonly ShopContext db;
 
-        // GET: api/Products
-        [Route("Products")]
-        public IQueryable<Product> GetProduct()
+        public ProductsController()
         {
-            return db.Product;
+            db = new ShopContext();
         }
 
-        // GET: api/Products/5
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> GetProduct(int id)
+        // GET api/products
+
+        public PagedResult<Product> Get(int pageNo = 1, int pageSize = 50, [FromUri] string[] sort = null, string search = null)
         {
-            Product product = await db.Product.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
+            // Determine the number of records to skip
+            int skip = (pageNo - 1) * pageSize;
 
-            return Ok(product);
-        }
+            IQueryable<Product> queryable = db.Products;
 
-        // PUT: api/Products/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutProduct(int id, Product product)
-        {
-            if (!ModelState.IsValid)
+            // Apply the search
+            if (!String.IsNullOrEmpty(search))
             {
-                return BadRequest(ModelState);
-            }
-
-            if (id != product.ProductID)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(product).State = EntityState.Modified;
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(id))
+                string[] searchElements = search.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string searchElement in searchElements)
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
+                    string element = searchElement;
+                    queryable = queryable.Where(c => c.Name.Contains(element) || c.Description.Contains(element));
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
-        }
+            // Add the sorting
 
-        // POST: api/Products
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> PostProduct(Product product)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            if (sort != null)
+                queryable = queryable.ApplySorting(sort);
+            else
+                queryable = queryable.OrderBy(c => c.ProductID);
 
-            db.Product.Add(product);
-            await db.SaveChangesAsync();
+            // Get the total number of records
+            int totalItemCount = queryable.Count();
 
-            return CreatedAtRoute("DefaultApi", new { id = product.ProductID }, product);
-        }
+            // Retrieve the customers for the specified page
+            var products = queryable
+                .Skip(skip)
+                .Take(pageSize)
+                .ToList();
 
-        // DELETE: api/Products/5
-        [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> DeleteProduct(int id)
-        {
-            Product product = await db.Product.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            db.Product.Remove(product);
-            await db.SaveChangesAsync();
-
-            return Ok(product);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool ProductExists(int id)
-        {
-            return db.Product.Count(e => e.ProductID == id) > 0;
+            // Return the paged results
+            return new PagedResult<Product>(products, pageNo, pageSize, totalItemCount);
         }
     }
 }

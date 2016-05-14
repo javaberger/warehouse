@@ -14,7 +14,6 @@
         };
 }
 
-
 <div style="width:100%;background-color:#e1e1e1; border-radius:1%;" id="search">
     <div class="navbar-form" role="search" id="searchform" style="width:100%;display:inline-block">
         <div style="margin-left:auto; margin-right:auto;" id="innerSearch">
@@ -23,7 +22,7 @@
                 <input type="text" name="search" class="form-control" placeholder="Search" id="search" style="float:left;max-width:80%; width:700px; padding-right:50px;">
                 <button id="search" type="submit" value="Пошук" class="btn btn-link" style="width:50px; float:left; margin-top:2px; margin-left:5px; background-color:white; border-radius:5%; height:30px;"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                 <div style="float:right" class="counts">
-                    <p style="margin-top:10px;">Тиждень:<span class="glyphicon glyphicon-dashboard"></span> @ViewBag.WeekCount | Всього:<span class="glyphicon glyphicon-list-alt"></span> @Model.TotalItemCount</p>
+                    <p style="margin-top:10px;"><span class="glyphicon glyphicon-dashboard"></span> @ViewBag.WeekCount | <span class="glyphicon glyphicon-list-alt"></span> @Model.TotalItemCount</p>
                 </div>
             }
         </div>

@@ -14,7 +14,7 @@ namespace I_Shop.Models
             Database.SetInitializer(new CreateDatabaseIfNotExists<ShopContext>());
         }
         public DbSet<Order> Order { get; set; }
-        public DbSet<Product> Product { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Customer> Client { get; set; }
         public DbSet<ProductCategory> Category { get; set; }
 
