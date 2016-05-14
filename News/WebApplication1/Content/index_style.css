@@ -14,7 +14,7 @@
 
     .most_popular{
         width: 100%;
-        background-color:#e1e1e1;
+        background-color:#f9f9f9;
         font-weight:bold;
         background-size: 100% 100%;
         border-radius: 10px;
@@ -28,7 +28,7 @@
         padding:15px;
     }
     .popular_by_week{
-        background-color:#e1e1e1;
+        background-color:#f9f9f9;
         border-radius: 10px;
         width:25%;
         float:right
@@ -38,7 +38,12 @@
         width:70%;
         table-layout:fixed;
     }
+    
 
+    #MainTable tr td:first-child ul li:first-child{
+        text-align:center;
+    }
+  
     #MainTable tr td:nth-child(1), th:nth-child(1){
         width:250px; 
         vertical-align:middle;
@@ -71,9 +76,9 @@
 		overflow-x: auto;
 		display: block;
 	}
-    table, table td {
+    /*table, table td {
         border: none !important;
-    }
+    }*/
 
     img {
      max-width: 100%; 
