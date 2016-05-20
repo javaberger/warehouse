@@ -108,7 +108,7 @@ namespace WebApplication1.Controllers
         public FileContentResult GetCoverImage(int id)
         {
             var cover = db.Articles.FirstOrDefault(p => p.ID == id);
-            if (cover != null)
+            if (cover.Cover != null && cover.CoverType !=null)
             {
                 return File(cover.Cover, cover.CoverType);
             }
@@ -194,34 +194,24 @@ namespace WebApplication1.Controllers
             return View(article);
         }
 
-        // GET: Articles/Delete/5
-        public ActionResult Delete(int? id)
+
+        [HttpPost]
+        public JsonResult Delete(int id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                Article article = db.Articles.Find(id);
+                db.Articles.Remove(article);
+                db.SaveChanges();
+                return Json(new { Success = true});
             }
-            Article article = db.Articles.Find(id);
-            if (article == null)
-            {
-                
-                return HttpNotFound();
+            catch
+            {//TODO: Log error				
+                 return Json(new { Success = false });
             }
-            
-            return View(article);
         }
 
-        // POST: Articles/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Article article = db.Articles.Find(id);
-            db.Articles.Remove(article);
-            db.SaveChanges();
-           
-            return RedirectToAction("Index");
-        }
+        
 
         protected override void Dispose(bool disposing)
         {

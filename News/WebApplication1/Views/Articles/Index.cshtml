@@ -13,8 +13,11 @@
         overflow: hidden; /* Обрезаем все, что не помещается в область */
         text-overflow: clip; /* Добавляем многоточие */
     }
-
-   
+    .ui-dialog-titlebar {
+        background-color: #4db7ad;
+        background-image: none;
+        color: #000;
+    }
 
     .text p {
         margin: 0;
@@ -68,16 +71,60 @@
                 <td style="width:80px">
                     <center>
                         @Html.ActionLink("Редагувати", "Edit", new { id = item.ID }, new { @style = "color:black; font-weight:bold;" })<br />
-                        @Html.ActionLink("Видалити", "Delete", new { id = item.ID }, new { @style = "color:black; font-weight:bold;" })<br />
+                        @Html.ActionLink("Видалити", "Delete", new { id = item.ID }, new { @class="delete-link", @style = "color:black; font-weight:bold;" })<br />
                     </center>
                 </td>
             </tr>
         }
 
     </table>
+    <div id="delete-dialog" title="Видалення новини">
+        <p>Ви впевнені що хочете видалити цю новину?</p>
+    </div>	
+
 
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+
 </div>
+
+
+@section scripts
+    {
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+    var deleteLinkObj;
+    // delete Link
+    $('.delete-link').click(function () {
+        deleteLinkObj = $(this);  //for future use
+        $('#delete-dialog').dialog('open');
+        return false; // prevents the default behaviour
+    });
+
+    $('#delete-dialog').dialog({
+        autoOpen: false, width: 400, resizable: false, modal: true, //Dialog options
+        buttons: {
+            "Так": function () {
+                $.post(deleteLinkObj[0].href, function (data) {  //Post to action
+                    if (data.Success) {
+                        deleteLinkObj.closest("tr").hide('fast'); //Hide Row
+                       
+                        //(optional) Display Confirmation
+                    }
+                    else {
+                        //(optional) Display Error
+                    }
+                });
+                $(this).dialog("close");
+                
+            },
+            "Відмінити": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+</script>
+
+}
 
 
 

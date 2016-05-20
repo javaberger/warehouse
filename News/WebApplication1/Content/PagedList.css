@@ -17,7 +17,7 @@
   margin-left: -1px;
   line-height: 1.428571429;
   text-decoration: none;
-  background-color: #ffffff;
+  background-color: #eeeeee;
   border: 1px solid #dddddd;
 }
 
@@ -50,7 +50,7 @@
   z-index: 2;
   color: #ffffff;
   cursor: default;
-  background-color: #ed5e42;
+  background-color: #999999;
   border-color: white;
 }
 

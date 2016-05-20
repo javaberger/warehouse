@@ -41,6 +41,13 @@ namespace WebApplication1.Controllers
             return PartialView("_AjaxMostPopular", model);
         }
 
+        [HttpGet]
+        public PartialViewResult Create()
+        {
+            return PartialView("_Login", new LoginViewModel());
+        }
+
+
         public ActionResult Index(int? page , string category, string search)
         {
             int pageSize = 4;

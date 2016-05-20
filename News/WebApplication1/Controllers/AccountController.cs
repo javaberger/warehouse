@@ -59,7 +59,7 @@ namespace WebApplication1.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View();
+            return PartialView("_Login");
         }
 
         //
@@ -71,7 +71,7 @@ namespace WebApplication1.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return PartialView("_Login", model);
             }
 
             // This doesn't count login failures towards account lockout
@@ -80,7 +80,7 @@ namespace WebApplication1.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return PartialView("_Success");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -88,7 +88,7 @@ namespace WebApplication1.Controllers
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                    return PartialView("_Login", model);
             }
         }
 
