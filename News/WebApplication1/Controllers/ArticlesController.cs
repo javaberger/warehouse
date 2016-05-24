@@ -13,22 +13,27 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using PagedList;
 using System.Diagnostics;
+using WebApplication1.Repository;
 
 namespace WebApplication1.Controllers
 {
     public class ArticlesController : ApplicationController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ArticleRepository repo;
+
+        public ArticlesController()
+        {
+            repo = new ArticleRepository();
+        }
 
         // GET: Articles
         [Authorize]
         public ActionResult Index(int? page)
         {
-            
             int pageSize = 4;
             int pageNumber = (page ?? 1);
             ViewBag.User = User.Identity.Name;
-            return View("Index",db.Articles.OrderByDescending(p=>p.ID).ToPagedList(pageNumber,pageSize));
+            return View("Index",repo.List().OrderByDescending(p=>p.ID).ToPagedList(pageNumber,pageSize));
         }
 
         // GET: Articles/Details/5
@@ -38,7 +43,7 @@ namespace WebApplication1.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Article article = db.Articles.Find(id);
+            Article article = repo.Get(id);
             if (article == null)
             {
                 return HttpNotFound();
@@ -58,13 +63,9 @@ namespace WebApplication1.Controllers
 
         private List<Categories> GetOptions()
         {
-            return db.Categories.ToList();
+            return repo.CategoriesList();
         }
 
-
-        // POST: Articles/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -74,9 +75,9 @@ namespace WebApplication1.Controllers
             {
                 if (file != null)
                 {
-                    string pic = System.IO.Path.GetFileName(file.FileName);
-                    string path = System.IO.Path.Combine(
-                                           Server.MapPath("~/images/"), pic);
+                    //string pic = System.IO.Path.GetFileName(file.FileName);
+                    //string path = System.IO.Path.Combine(
+                    //                       Server.MapPath("~/images/"), pic);
                     // file is uploaded
 
                     using (MemoryStream ms = new MemoryStream())
@@ -86,7 +87,7 @@ namespace WebApplication1.Controllers
                         article.Cover = array;
                         article.CoverType = file.ContentType;
                     }
-                    file.SaveAs(path);
+                    //file.SaveAs(path);
                 }
 
                 article.DateCreate = DateTime.Now;
@@ -96,8 +97,8 @@ namespace WebApplication1.Controllers
                 var currentUser = manager.FindById(User.Identity.GetUserId());
 
                 article.UserID = User.Identity.GetUserId();
-                db.Articles.Add(article);//Add
-                db.SaveChanges();
+                repo.Create(article);//Add
+                
                 return RedirectToAction("Index");
             }
 
@@ -107,7 +108,7 @@ namespace WebApplication1.Controllers
         [AllowAnonymous]
         public FileContentResult GetCoverImage(int id)
         {
-            var cover = db.Articles.FirstOrDefault(p => p.ID == id);
+            var cover = repo.List().FirstOrDefault(p => p.ID == id);
             if (cover.Cover != null && cover.CoverType !=null)
             {
                 return File(cover.Cover, cover.CoverType);
@@ -123,7 +124,7 @@ namespace WebApplication1.Controllers
         public FileContentResult GetImageTop(int id)
         {
 
-            var result = db.Articles.First(a=>a.ID==id);
+            var result = repo.List().First(a=>a.ID==id);
 
             
             if (result != null)
@@ -137,8 +138,6 @@ namespace WebApplication1.Controllers
             }
         }
 
-
-
         // GET: Articles/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -146,7 +145,7 @@ namespace WebApplication1.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Article article = db.Articles.Find(id);
+            Article article = repo.Get(id);
             ViewBag.Categories = GetOptions();
             if (article == null)
             {
@@ -155,9 +154,7 @@ namespace WebApplication1.Controllers
             return View(article);
         }
 
-        // POST: Articles/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID, Name,Content, CategoriesID, Description, Cover, CoverType")] Article article, HttpPostedFileBase file)
@@ -174,21 +171,21 @@ namespace WebApplication1.Controllers
                         article.CoverType = file.ContentType;
                     }
                 }
-                db.Entry(article).State = EntityState.Modified;
+                repo.Update(article);
 
                 if (file != null)
                 {
-                    db.Entry(article).Property(r => r.Cover).IsModified = true;
-                    db.Entry(article).Property(r => r.CoverType).IsModified = true;
+                    repo.App().Entry(article).Property(r => r.Cover).IsModified = true;
+                    repo.App().Entry(article).Property(r => r.CoverType).IsModified = true;
                 }
                 else
                 {
-                    db.Entry(article).Property(r => r.Cover).IsModified = false;
-                    db.Entry(article).Property(r => r.CoverType).IsModified = false;
+                    repo.App().Entry(article).Property(r => r.Cover).IsModified = false;
+                    repo.App().Entry(article).Property(r => r.CoverType).IsModified = false;
                 }
-                db.Entry(article).Property(r => r.UserID).IsModified = false;
-                db.Entry(article).Property(r => r.DateCreate).IsModified = false;
-                db.SaveChanges();
+                repo.App().Entry(article).Property(r => r.UserID).IsModified = false;
+                repo.App().Entry(article).Property(r => r.DateCreate).IsModified = false;
+                repo.App().SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(article);
@@ -200,26 +197,13 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                Article article = db.Articles.Find(id);
-                db.Articles.Remove(article);
-                db.SaveChanges();
+                repo.Delete(id);
                 return Json(new { Success = true});
             }
             catch
             {//TODO: Log error				
                  return Json(new { Success = false });
             }
-        }
-
-        
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }
