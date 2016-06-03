@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "add_storage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Створити файли</h2>
+
+<div class="row">
+    <div class="col col-md-12">
+        <div class="form-group">
+            <p>Ключ доступу: @ViewBag.HashCode</p>
+            <label>Заголовок:</label>
+            <textarea class="form-control" rows="2"></textarea>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col col-md-12">
+        <div class="form-group">
+            <label>Текст:</label>
+            <textarea class="form-control" rows="3"></textarea>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col col-md-12">
+        <div class="form-group">
+            <label>Виберіть файл:</label>
+            <input type="file" name="file" id="file" multiple />
+        </div>
+    </div>
+</div>
+
+<input type="submit" class="btn btn-success" value="Додати" />
