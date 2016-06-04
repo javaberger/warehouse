@@ -14,8 +14,8 @@ namespace WebApplication1.Controllers
     public ApplicationController()
     {
         nw = new ApplicationDbContext();
-        ViewData["categories"] = from c in nw.Categories
-                                 select c;
+        //ViewData["categories"] = from c in nw.Categories
+        //                         select c;
     }
     }
 }

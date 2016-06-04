@@ -6,13 +6,16 @@
 
 <h2>Створити файли</h2>
 
+@using (Html.BeginForm("SaveFile", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+ 
 <div class="row">
     <div class="col col-md-12">
         <div class="form-group">
             <p>Ключ доступу: @ViewBag.HashCode</p>
             <label>Заголовок:</label>
-            <textarea class="form-control" rows="2"></textarea>
-
+            <textarea class="form-control" rows="2" name="name"></textarea>
         </div>
     </div>
 </div>
@@ -21,7 +24,7 @@
     <div class="col col-md-12">
         <div class="form-group">
             <label>Текст:</label>
-            <textarea class="form-control" rows="3"></textarea>
+            <textarea class="form-control" rows="3" name="description"></textarea>
         </div>
     </div>
 </div>
@@ -30,9 +33,15 @@
     <div class="col col-md-12">
         <div class="form-group">
             <label>Виберіть файл:</label>
-            <input type="file" name="file" id="file" multiple />
+                <div id="multiple">
+                    <input type="file" class="multiple" name="files" multiple />
+                </div>
+              <br />
+            <input type="submit" class="btn btn-success" value="Додати" />
+            
         </div>
     </div>
 </div>
+}
 
-<input type="submit" class="btn btn-success" value="Додати" />
+

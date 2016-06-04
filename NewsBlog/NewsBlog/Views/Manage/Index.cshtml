@@ -1,0 +1,163 @@
+﻿@using Microsoft.AspNet.Identity;
+@model NewsBlog.Models.IndexViewModel
+
+@{
+    ViewBag.Title = "Manage";
+}
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+
+@using (Html.BeginForm("UpdateUser", "Manage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div id="login" style="float:left; margin-top:20px; width:100%;">
+        <h2 style="text-align:center"><span class="fontawesome-lock"></span>Особистий кабінет</h2>
+        <fieldset>
+            <div style="float:left;padding:23px;">
+                @{
+                    <img src="@Url.Action("GetUserCover", "Manage")" style="margin-left: auto;  width:150px;height:150px;margin-right: auto; border-radius:50%; display:block" />
+                }
+
+                <br /><br />
+
+                <input type="file" name="file" id="file" style="width: 100%;margin-left: auto; margin-right: auto;" />
+
+            </div>
+
+            <h4>Ім'я</h4>
+
+            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+            <br />
+
+            <h4>Прізвище</h4>
+
+            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+            <br />
+
+            <input type="submit" value="Зберегти" class="btn btn-default" />
+        </fieldset>
+    </div>
+}
+
+@*
+    <div class="form-group">
+        @Html.LabelFor(model => model.HasPassword, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            [
+            @if (Model.HasPassword)
+        {
+                @Html.ActionLink("Change your password", "ChangePassword", new { @class = "form-control" })
+            }
+            else
+            {
+                @Html.ActionLink("Create", "SetPassword")
+            }
+            ]
+        </div>
+    </div>*@
+
+
+
+
+
+@*
+    <dl class="dl-horizontal">
+
+                @*
+                    <dt>External Logins:</dt>
+                    <dd>
+                        @Model.Logins.Count [
+                        @Html.ActionLink("Manage", "ManageLogins") ]
+                    </dd>
+*@
+
+@*
+    Phone Numbers can used as a second factor of verification in a two-factor authentication system.
+
+     See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+        for details on setting up this ASP.NET application to support two-factor authentication using SMS.
+
+     Uncomment the following block after you have set up two-factor authentication
+*@
+@*
+    <dt>Phone Number:</dt>
+    <dd>
+        @(Model.PhoneNumber ?? "None") [
+        @if (Model.PhoneNumber != null)
+        {
+            @Html.ActionLink("Change", "AddPhoneNumber")
+            @: &nbsp;|&nbsp;
+            @Html.ActionLink("Remove", "RemovePhoneNumber")
+        }
+        else
+        {
+            @Html.ActionLink("Add", "AddPhoneNumber")
+        }
+        ]
+    </dd>
+*@
+
+@*
+    <dt>Two-Factor Authentication:</dt>
+    <dd>
+        <p>
+            There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+            for details on setting up this ASP.NET application to support two-factor authentication.
+        </p>
+        @* @if (Model.TwoFactor)
+        {
+            using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <text>Enabled
+                <input type="submit" value="Disable" class="btn btn-link" />
+                </text>
+            }
+        }
+        else
+        {
+            using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <text>Disabled
+                <input type="submit" value="Enable" class="btn btn-link" />
+                </text>
+            }
+        }
+    </dd>
+*@
+
+@*
+    <dt>Прізвище:</dt>
+    <dd>
+
+    </dd>
+    <dt>Ім'я:</dt>
+    <dd>
+
+    </dd>
+
+    <dt>Аватар:</dt>
+    <dd>
+
+    </dd>
+
+    <dt>Password:</dt>
+    @*<dd>
+            [
+            @if (Model.HasPassword)
+            {
+                @Html.ActionLink("Change your password", "ChangePassword")
+            }
+            else
+            {
+                @Html.ActionLink("Create", "SetPassword")
+            }
+            ]
+        </dd>
+            </dl>  *@
+
+
+
