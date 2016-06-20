@@ -13,8 +13,7 @@
 <body>
     <div style="background-color:#4db7ad; height:18px;margin-top:-30px;">
     </div>
-
-    <div class="navbar navbar-default">
+    <div class="navbar navbar-default" style="background-color:#DFF0D8;">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -22,8 +21,8 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <i class="glyphicon glyphicon-leaf" style="margin-top:12px; font-size:20px; color:coral;"></i>
-                @Html.ActionLink("NewsBlog", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", @style = "color:coral; font-weight:bold; font-size:25px" })
+                <i class="glyphicon glyphicon-leaf" style="margin-top:12px; font-size:20px; color:#4DB7AD;"></i>
+                @Html.ActionLink("NewsBlog", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", @style = "color:#4DB7AD; font-weight:bold; font-size:25px" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav nav-tabs">
@@ -33,8 +32,6 @@
                         <li>@Html.ActionLink("Admin", "Admin", "Home")</li>
                         <li>@Html.ActionLink("Додати новину", "Create", "Articles")</li>
                     }
-
-
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -49,8 +46,6 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/jqueryUI")
     @Scripts.Render("~/bundles/scrollup")
-
-
     @RenderSection("scripts", required: false)
     <a href="#" class="scrollup">Наверх</a>
 </body>
