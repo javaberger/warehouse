@@ -79,6 +79,12 @@ namespace NewsBlog.Controllers
         }
 
 
+        public ActionResult Admin()
+        {
+            return RedirectToAction("Index","Articles");
+        }
+
+
         public ActionResult Index(int? page, string category, string search)
         {
             int pageSize = 4;
@@ -103,6 +109,7 @@ namespace NewsBlog.Controllers
                 //Search
                 if (search != null)
                 {
+                    ViewBag.isSearch = true;
                     var query = from article in db.Articles
                                 where article.Name.Contains(search) ||
                                     article.Description.Contains(search) ||
@@ -124,11 +131,13 @@ namespace NewsBlog.Controllers
                 }
                 else
                 {
+                    ViewBag.isSearch = false;
                     /*None*/
                 }
                 //CategorySort
                 if (category != null)
                 {
+                    ViewBag.isSearch = true;
                     var query = from articless in db.Articles where articless.Categories.Name == category orderby articless.ID descending select articless;
                     ViewBag.SearchString = "По вашому запиту '" + category + "' знайдено [" + query.Count() + "] статті";
 
@@ -141,7 +150,7 @@ namespace NewsBlog.Controllers
                 }
                 else
                 {
-
+                    ViewBag.isSearch = false;
                     //Main model
                     var query = from news in db.Articles join users in db.Users on news.UserID equals users.Id orderby news.ID descending select users;
                     if (query != null)
